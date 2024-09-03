@@ -17,3 +17,6 @@ goimports:
 
 clean:
 	rm -rf build
+
+vendor:
+	go mod vendor
