@@ -1,7 +1,7 @@
 name: Linter
 on:
   push:
-    branches: [mainline]
+    branches: [main]
 jobs:
   lint:
     runs-on: ubuntu-latest
