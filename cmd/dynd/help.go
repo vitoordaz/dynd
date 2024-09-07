@@ -7,6 +7,6 @@ import (
 )
 
 func printUsage() {
-	fmt.Printf("%s is a tool for updating gandi domain IP address.\n\n", os.Args[0])
+	fmt.Printf("%s is a tool for updating Gandi domain IP address.\n\n", os.Args[0])
 	flag.PrintDefaults()
 }
