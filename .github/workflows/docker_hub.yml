@@ -14,8 +14,8 @@ jobs:
       attestations: write
       id-token: write
     env:
-      REGISTRY: docker.com
-      IMAGE_NAME: vitoordaz/dynd
+      REGISTRY: vitoordaz
+      IMAGE_NAME: dynd
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
