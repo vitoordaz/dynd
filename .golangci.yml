@@ -2,3 +2,24 @@ linters:
   enable-all: true
   disable:
     - govet
+    - forbidigo
+    - tagliatelle
+    - wrapcheck
+    - varnamelen
+    - ireturn
+    - nlreturn
+    - gochecknoglobals
+    - exhaustivestruct
+    - gosec
+    - cyclop
+    - wsl
+    - nestif
+    - depguard
+    - exhaustruct
+    - gofumpt
+    - gci
+linters-settings:
+  lll:
+    line-length: 120
+  goimports:
+    local-prefixes: github.com/vitoordaz/dynd

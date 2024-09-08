@@ -2,8 +2,15 @@ package dns
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
+)
+
+var (
+	ErrInvalidType  = errors.New("invalid type")
+	ErrServerError  = errors.New("server error")
+	ErrInvalidToken = errors.New("invalid token")
 )
 
 // Record is a representation of DNS record.

@@ -15,6 +15,7 @@ import (
 )
 
 const (
+	defaultRetryCount      = 5
 	gandiTokenInfoEndpoint = "https://id.gandi.net/tokeninfo"
 	gandiRecordsEndpoint   = "https://api.gandi.net/v5/livedns/domains/%s/records"
 	gandiRecordEndpoint    = "https://api.gandi.net/v5/livedns/domains/%s/records/%s/%s"
@@ -22,7 +23,7 @@ const (
 
 func NewGandiClient(ctx context.Context, accessToken string) (Client, error) {
 	client := resty.New().
-		SetRetryCount(5).
+		SetRetryCount(defaultRetryCount).
 		SetAuthScheme("Bearer").
 		SetAuthToken(accessToken).
 		SetJSONUnmarshaler(json.Unmarshal)
@@ -65,7 +66,7 @@ func (c *gandiClient) GetRecords(ctx context.Context, domain string) ([]*Record,
 	}
 	gandiRecords, ok := resp.Result().(*[]*gandiRecord)
 	if !ok {
-		return nil, fmt.Errorf("invalid result type: %s", reflect.TypeOf(resp.Result()))
+		return nil, fmt.Errorf("%w: %s", ErrInvalidType, reflect.TypeOf(resp.Result()))
 	}
 	records := make([]*Record, 0, len(*gandiRecords))
 	for _, r := range *gandiRecords {
@@ -110,9 +111,9 @@ func (c *gandiClient) CreateRecord(
 	}
 	result, ok := resp.Result().(*gandiError)
 	if !ok {
-		return fmt.Errorf("invalid result type: %s", reflect.TypeOf(resp.Result()))
+		return fmt.Errorf("%w: %s", ErrInvalidType, reflect.TypeOf(resp.Result()))
 	}
-	return fmt.Errorf(result.Message)
+	return fmt.Errorf("%w: %s", ErrServerError, result.Message)
 }
 
 func (c *gandiClient) ReplaceRecord(
@@ -147,9 +148,9 @@ func (c *gandiClient) ReplaceRecord(
 	}
 	result, ok := resp.Result().(*gandiError)
 	if !ok {
-		return fmt.Errorf("invalid result type: %s", reflect.TypeOf(resp.Result()))
+		return fmt.Errorf("%w: %s", ErrInvalidType, reflect.TypeOf(resp.Result()))
 	}
-	return fmt.Errorf(result.Message)
+	return fmt.Errorf("%w: %s", ErrServerError, result.Message)
 }
 
 type tokenInfoResponse struct {
@@ -167,7 +168,7 @@ func validateAccessToken(ctx context.Context, client *resty.Client) error {
 	}
 	result, ok := resp.Result().(*tokenInfoResponse)
 	if !ok {
-		return fmt.Errorf("invalid result type: %s", reflect.TypeOf(result))
+		return fmt.Errorf("%w: %s", ErrInvalidType, reflect.TypeOf(result))
 	}
 	if err := validateScope(result.Scope, getRequiredScope()); err != nil {
 		return err
@@ -188,7 +189,7 @@ func validateScope(tokenScope []string, required []string) error {
 		}
 	}
 	if len(missingScope) > 0 {
-		return fmt.Errorf("token is missing following scope: %s", strings.Join(missingScope, ", "))
+		return fmt.Errorf("%w: token is missing following scope: %s", ErrInvalidToken, strings.Join(missingScope, ", "))
 	}
 	return nil
 }

@@ -9,10 +9,12 @@ import (
 	"github.com/go-resty/resty/v2"
 )
 
+const defaultRetryCount = 5
+
 func NewIPIFYClient() Client {
 	return &ipifyClient{
 		client: resty.New().
-			SetRetryCount(5).
+			SetRetryCount(defaultRetryCount).
 			SetJSONUnmarshaler(json.Unmarshal),
 	}
 }
@@ -38,7 +40,7 @@ func (c *ipifyClient) GetIPAddress(ctx context.Context) (string, error) {
 	}
 	result, ok := resp.Result().(*ipifyResult)
 	if !ok {
-		return "", fmt.Errorf("invalid result type: %s", reflect.TypeOf(resp.Result()))
+		return "", fmt.Errorf("%w: %s", ErrInvalidType, reflect.TypeOf(resp.Result()))
 	}
 	return result.IP, nil
 }
