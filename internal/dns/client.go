@@ -3,14 +3,14 @@ package dns
 import (
 	"context"
 	"errors"
-	"fmt"
 	"time"
 )
 
 var (
-	ErrInvalidType  = errors.New("invalid type")
-	ErrServerError  = errors.New("server error")
-	ErrInvalidToken = errors.New("invalid token")
+	ErrInvalidType   = errors.New("invalid type")
+	ErrServerError   = errors.New("server error")
+	ErrInvalidToken  = errors.New("invalid token")
+	ErrAlreadyExists = errors.New("item already exists")
 )
 
 // Record is a representation of DNS record.
@@ -21,8 +21,6 @@ type Record struct {
 	Type   string
 	Values []string
 }
-
-var ErrAlreadyExists = fmt.Errorf("item already exists")
 
 type Client interface {
 	GetRecords(ctx context.Context, domain string) ([]*Record, error)
