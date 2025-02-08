@@ -8,5 +8,6 @@ COPY Makefile /src/
 RUN make vendor test build
 
 FROM alpine
+RUN update-ca-certificates
 COPY --from=build /src/build/dynd /bin/dynd
 ENTRYPOINT ["/bin/dynd"]
