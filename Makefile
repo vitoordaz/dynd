@@ -4,7 +4,7 @@ build:
 	go build -mod=vendor -o build/dynd cmd/dynd/*.go
 
 lint: gofmt goimports
-	docker run --rm -e LOG_LEVEL=error -v $(PWD):/app -w /app golangci/golangci-lint:latest golangci-lint run -v
+	docker run --rm -e LOG_LEVEL=error -v $(PWD):/app -w /app golangci/golangci-lint:latest-alpine golangci-lint run -v
 
 test:
 	go test ./...

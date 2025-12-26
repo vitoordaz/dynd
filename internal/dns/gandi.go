@@ -1,4 +1,4 @@
-internal/dns/gandi.go package dns
+package dns
 
 import (
 	"context"
