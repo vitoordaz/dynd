@@ -1,7 +1,7 @@
 module github.com/vitoordaz/dynd
 
-go 1.21.0
+go 1.23.0
 
-require github.com/go-resty/resty/v2 v2.14.0
+require github.com/go-resty/resty/v2 v2.17.1
 
-require golang.org/x/net v0.27.0 // indirect
+require golang.org/x/net v0.43.0 // indirect
