@@ -15,7 +15,10 @@ import (
 	"github.com/vitoordaz/dynd/internal/myip"
 )
 
-const defaultPollInterval = 60 // 60 seconds
+const (
+	defaultPollInterval                     = 60 // 60 seconds
+	gandiAccessTokenEnvironmentVariableName = "GANDI_ACCESS_TOKEN"
+)
 
 var (
 	logVerbose = log.New(os.Stdout, "D: ", 0)
@@ -43,8 +46,12 @@ func run() int {
 		return exitCodeError
 	}
 	if *gandiAccessToken == "" {
-		logError.Println("gandi access token is required")
-		return exitCodeError
+		envValue, ok := os.LookupEnv(gandiAccessTokenEnvironmentVariableName)
+		if !ok {
+			logError.Println("gandi access token is required")
+			return exitCodeError
+		}
+		*gandiAccessToken = envValue
 	}
 
 	dnsClient, err := dns.NewGandiClient(ctx, *gandiAccessToken)
