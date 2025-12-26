@@ -1,4 +1,4 @@
-package dns
+internal/dns/gandi.go package dns
 
 import (
 	"context"
@@ -69,13 +69,13 @@ func (c *gandiClient) GetRecords(ctx context.Context, domain string) ([]*Record,
 		return nil, fmt.Errorf("%w: %s", ErrInvalidType, reflect.TypeOf(resp.Result()))
 	}
 	records := make([]*Record, 0, len(*gandiRecords))
-	for _, r := range *gandiRecords {
+	for _, record := range *gandiRecords {
 		records = append(records, &Record{
-			ID:     r.HREF,
-			Name:   r.Name,
-			TTL:    time.Duration(r.TTL),
-			Type:   r.Type,
-			Values: r.Values,
+			ID:     record.HREF,
+			Name:   record.Name,
+			TTL:    time.Duration(record.TTL),
+			Type:   record.Type,
+			Values: record.Values,
 		})
 	}
 	return records, nil

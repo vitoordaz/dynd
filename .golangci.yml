@@ -1,25 +1,27 @@
+version: "2"
 linters:
-  enable-all: true
+  default: "all"
   disable:
-    - govet
     - forbidigo
-    - tagliatelle
     - wrapcheck
     - varnamelen
     - ireturn
     - nlreturn
     - gochecknoglobals
-    - exhaustivestruct
     - gosec
-    - cyclop
-    - wsl
     - nestif
     - depguard
     - exhaustruct
-    - gofumpt
-    - gci
-linters-settings:
-  lll:
-    line-length: 120
-  goimports:
-    local-prefixes: github.com/vitoordaz/dynd
+    - wsl
+    - tagliatelle
+    - revive
+  settings:
+    lll:
+      line-length: 120
+    cyclop:
+      max-complexity: 15
+formatters:
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/vitoordaz/dynd
